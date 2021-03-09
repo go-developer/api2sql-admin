@@ -1,5 +1,5 @@
 const path = require('path')
-const resolve = function(dir) {
+const resolve = function (dir) {
   return path.join(__dirname, dir)
 }
 
@@ -27,7 +27,7 @@ module.exports = {
     },
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
-        target: process.env.VUE_APP_BASE_API,
+        target: process.env.VUE_APP_BASE_REWRITE_API,
         changeOrigin: true,
         secure: false,
         pathRewrite: {

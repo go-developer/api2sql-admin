@@ -7,7 +7,7 @@ import { Loading, Message } from 'element-ui' // 引用element-ui的加载和消
 
 const $axios = axios.create({
   // 设置超时时间
-  timeout: 30000,
+  timeout: 1000,
   // 基础url，会在请求url中自动添加前置链接
   baseURL: process.env.VUE_APP_BASE_API
 })
@@ -83,9 +83,9 @@ export default {
     return $axios({
       method: 'post',
       url,
-      data: Qs.stringify(data),
+      data: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'application/json; charset=UTF-8'
       }
     })
   },

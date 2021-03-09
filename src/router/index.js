@@ -138,6 +138,30 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/database',
+    name: '数据库管理',
+    redirect: '/database/list',
+    component: Layout,
+    meta: {
+      title: '数据库管理',
+      icon: 'el-icon-table iconfont'
+    },
+    children: [
+      {
+        path: 'list',
+        name: '数据库列表',
+        component: () => import('@/views/database/list'),
+        meta: { title: '数据库列表' }
+      },
+      {
+        path: 'add',
+        name: '添加数据库实例',
+        component: () => import('@/views/database/add'),
+        meta: { title: '添加数据库实例' }
+      }
+    ]
+  },
+  {
     path: '/icons',
     component: Layout,
     name: 'Icons',
