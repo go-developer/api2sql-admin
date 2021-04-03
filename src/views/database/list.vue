@@ -45,7 +45,7 @@
         <el-table-column
           prop="id"
           label="数据库ID"
-          width="60"
+          width="200"
         ></el-table-column>
         <el-table-column prop="host" label="数据库IP"></el-table-column>
         <el-table-column prop="port" label="数据库端口"></el-table-column>
@@ -58,7 +58,7 @@
         <el-table-column
           prop="password"
           label="密码"
-          width="70"
+          width="200"
         ></el-table-column>
         <el-table-column prop="status" label="状态" width="90">
           <template slot-scope="scope">
@@ -67,7 +67,7 @@
             }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="300">
+        <el-table-column label="操作" width="400">
           <template slot-scope="scope">
             <el-button
               type="primary"
@@ -77,20 +77,26 @@
             <el-button
               type="warning"
               @click="toConfirm(scope.row)"
-              :disabled="scope.row.status === 1 ? false : true"
+              :disabled="scope.row.status === 0 ? false : true"
               >发布</el-button
+            >
+            <el-button
+              type="danger"
+              @click="toConfirm(scope.row)"
+              :disabled="scope.row.status !== 2 ? false : true"
+            >下线</el-button
             >
             <el-button
               type="success"
               @click="toSuccess(scope.row)"
-              :disabled="scope.row.status === 2 ? false : true"
+              :disabled="scope.row.status >= 0 ? false : true"
               >验证</el-button
             >
             <el-button
               type="danger"
               @click="toDelete(scope.row)"
-              :disabled="scope.row.status !== 3 ? false : true"
-              >下线</el-button
+              :disabled="scope.row.status === 2 ? false : true"
+              >重新发布</el-button
             >
           </template>
         </el-table-column>
@@ -176,14 +182,14 @@
 </template>
 
 <script>
-import { getAllDatabaseList, createDatabaseInstance } from "@/api/database";
+import { getAllDatabaseList, createDatabaseInstance } from '@/api/database'
 export default {
   data() {
     return {
       tableData: [],
       allList: [],
       schArr: [],
-      sch_order: "",
+      sch_order: '',
       sch_status: null,
       sch_date: null,
       currentPage: 1,
@@ -192,20 +198,20 @@ export default {
       pageSizes: [10, 20, 30, 40],
       diaIsShow: false,
       formData: {},
-      editType: "",
+      editType: '',
       options: [
-        { label: "使用中", value: 1 },
-        { label: "已下线", value: 2 },
-        { label: "待发布", value: 0 },
+        { label: '使用中', value: 1 },
+        { label: '已下线', value: 2 },
+        { label: '待发布', value: 0 }
       ],
       rowIndex: 0,
       rules: {
         flag: [
           {
             required: true,
-            message: "请输入数据库标识",
-            trigger: "change",
-          },
+            message: '请输入数据库标识',
+            trigger: 'change'
+          }
         ],
         host: [
           {
@@ -219,13 +225,6 @@ export default {
           {
             required: true,
             message: "请输入数据库端口",
-            trigger: "change",
-          },
-        ],
-        username: [
-          {
-            required: true,
-            message: "请输入数据库名称",
             trigger: "change",
           },
         ],
@@ -273,9 +272,9 @@ export default {
     tagClass(val) {
       if (val === undefined) return;
       if (val === 0) {
-        return "success";
-      } else if (val === 1) {
         return "info";
+      } else if (val === 1) {
+        return "success";
       } else if (val === 2) {
         return "warning";
       } else {
@@ -311,40 +310,40 @@ export default {
     },
     // 查找
     searchTab() {
-      let arrList = [];
+      let arrList = []
       for (let item of this.allList) {
         if (
-          this.sch_order.trim() === "" &&
+          this.sch_order.trim() === '' &&
           this.sch_status === null &&
           this.sch_date === null
         ) {
-          arrList = this.allList;
-          break;
+          arrList = this.allList
+          break
         } else if (
           item.order.startsWith(this.sch_order) &&
           (this.sch_status !== null ? item.status === this.sch_status : true) &&
           (this.sch_date !== null ? item.time.startsWith(this.sch_date) : true)
         ) {
-          let obj = Object.assign({}, item);
-          arrList.push(obj);
+          let obj = Object.assign({}, item)
+          arrList.push(obj)
         }
       }
-      this.schArr = arrList;
-      this.total = arrList.length;
-      this.currentPage = 1;
-      this.pageSize = 10;
-      this.getPageData();
+      this.schArr = arrList
+      this.total = arrList.length
+      this.currentPage = 1
+      this.pageSize = 10
+      this.getPageData()
     },
     // add
     addTab() {
-      this.formData = {};
-      this.diaIsShow = true;
+      this.formData = {}
+      this.diaIsShow = true
       // this.formData.order = (Math.random() * 10e18).toString();
       // this.formData.id = this.allList.length + 1;
-      this.editType = "add";
+      this.editType = 'add'
       this.$nextTick(() => {
-        this.$refs.diaForm.clearValidate();
-      });
+        this.$refs.diaForm.clearValidate()
+      })
     },
     // 审核
     toConfirm(row) {
